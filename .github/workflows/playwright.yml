@@ -1,0 +1,75 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  Build:  
+    name: Build
+    timeout-minutes: 30 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm install
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Cache node_modules and Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+  frontend-tests:  
+    name: FE Tests
+    timeout-minutes: 30 
+    runs-on: ubuntu-latest
+    needs: Build  
+    steps:
+      - uses: actions/checkout@v4  
+      - name: Restore Cached Dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+      - name: Run Frontend Tests  
+        run: npx playwright test tests/frontend
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-tests-report 
+          path: playwright-report/
+          retention-days: 30
+
+  backend-tests: 
+    name: BE Tests
+    timeout-minutes: 30  
+    runs-on: ubuntu-latest
+    needs: Build 
+    steps:
+      - uses: actions/checkout@v4  
+      - name: Restore Cached Dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+      - name: Run Backend Tests 
+        run: npx playwright test tests/backend
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-tests-report  
+          path: playwright-report/
+          retention-days: 30

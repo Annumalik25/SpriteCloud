@@ -1,0 +1,20 @@
+{
+    "invalidUser":{
+      "Username": "standard_user",
+      "Password": "wrongpassword"
+    },
+    "validUser":{
+      "Username": "standard_user",
+      "Password": "secret_sauce"
+    },
+    "checkoutDetails": {
+      "firstName": "test",
+      "lastName": "user",
+      "postalCode": "12345"
+    },
+    "messages": {
+      "orderConfirmation": "Thank you for your order!",
+      "invalidLogin": "Epic sadface: Username and password do not match any user in this service"
+    }
+  }
+  

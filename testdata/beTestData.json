@@ -1,0 +1,25 @@
+{
+  "users": {
+    "validPage": 2
+  },
+  "validUser": {
+    "email": "eve.holt@reqres.in",
+    "password": "cityslicka"
+  },
+  "missingPwdUser": {
+    "email": "eve.holt@reqres.in",
+    "password": ""
+  },
+  "invalidUser": {
+    "email": "wrong.email@reqres.in",
+    "password": "wrongpassword"
+  },
+  "updateUser": {
+    "userId": 2,
+    "name": "John Doe",
+    "job": "Software Engineer"
+  },
+  "delay": {
+    "maxDelay": 3
+  }
+}
